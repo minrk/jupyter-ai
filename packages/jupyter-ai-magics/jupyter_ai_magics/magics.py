@@ -7,7 +7,7 @@ from importlib_metadata import entry_points
 from IPython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_cell_magic
 from IPython.core.magic_arguments import magic_arguments, argument, parse_argstring
-from IPython.display import HTML, Markdown, Math, JSON
+from IPython.display import HTML, Image, JSON, Markdown, Math
 
 from .providers import BaseProvider
 
@@ -22,6 +22,7 @@ MODEL_ID_ALIASES = {
 DISPLAYS_BY_FORMAT = {
     "code": None,
     "html": HTML,
+    "image": Image,
     "markdown": Markdown,
     "math": Math,
     "md": Markdown,
@@ -34,6 +35,7 @@ MARKDOWN_PROMPT_TEMPLATE = '{prompt}\n\nProduce output in markdown format only.'
 PROMPT_TEMPLATES_BY_FORMAT = {
     "code": '{prompt}\n\nProduce output as source code only, with no text before or after it.',
     "html": '{prompt}\n\nProduce output in HTML format only, with no markup before or afterward.',
+    "image": '{prompt}\n\nProduce output as an image only, with no text before or after it.',
     "markdown": MARKDOWN_PROMPT_TEMPLATE,
     "md": MARKDOWN_PROMPT_TEMPLATE,
     "math": '{prompt}\n\nProduce output in LaTeX format only, with $$ at the beginning and end.',
@@ -118,7 +120,7 @@ class AiMagics(Magics):
                 optionally prefixed with the ID of the model provider, delimited
                 by a colon.""")
     @argument('-f', '--format',
-                choices=["code", "markdown", "html", "json", "math", "md", "raw"],
+                choices=["code", "html", "image", "json", "markdown", "math", "md", "raw"],
                 nargs="?",
                 default="markdown",
                 help="""IPython display to use when rendering output. [default="markdown"]""")
